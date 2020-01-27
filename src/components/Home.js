@@ -1,5 +1,6 @@
 import React from 'react'
 import Image from 'react-bootstrap/Image'
+import {Link} from 'react-router-dom'
 
 const Home = () => {
   return (
@@ -7,19 +8,17 @@ const Home = () => {
       <header className="App-header">
         <Image
           src='/pikachu-logo.gif'
-          style={{maxWidth: '200px'}} 
+          style={{maxWidth: '200px'}}
         />
         <p>
           A <code>Pokemon Searcher App</code> using <code>React Bootstrap</code>
         </p>
-        <a
+        <Link
           className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+          to="/pokedex"
         >
           Go to Pokedex
-        </a>
+        </Link>
       </header>
     </>
   )
