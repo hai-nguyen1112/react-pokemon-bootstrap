@@ -41,3 +41,20 @@ const fetchPokedexFail = error => {
   }
 }
 // end of FETCH POKEDEX
+
+// start of SEARCH TERM
+export const onSearchTermChange = searchTerm => {
+  return {
+    type: actionTypes.SEARCH_TERM_WAS_CHANGED,
+    searchTerm: searchTerm
+  }
+}
+// end of SEARCH TERM
+
+// start of RESET PERSISTED STATE
+export const onResetPersistedState = () => {
+  return {
+    type: actionTypes.PERSISTED_STATE_WAS_RESET
+  }
+}
+// end of RESET PERSISTED STATE

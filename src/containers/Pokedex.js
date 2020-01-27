@@ -8,20 +8,24 @@ import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import PokemonCard from '../components/PokemonCard'
+import ExitButton from '../helperComponents/ExitButton'
+import PokemonSearch from '../components/PokemonSearch'
 
 class Pokedex extends Component {
   componentDidMount() {
-    if (isEmpty(this.props.pokedex)) {
-      this.props.fetchPokedex()
-    }
+    this.props.fetchPokedex()
   }
 
   render() {
-    const {isLoadingPokedex, loadPokedexError, pokedex} = this.props
+    const {isLoadingPokedex, loadPokedexError, pokedex, searchTerm} = this.props
 
     let pokemonCards
     if (!isEmpty(pokedex)) {
-      pokemonCards = pokedex.map(pokemon => <PokemonCard key={pokemon.id} pokemon={pokemon} />)
+      pokemonCards
+      =
+      pokedex
+      .filter(pokemon => pokemon.name.toLowerCase().includes(searchTerm.toLowerCase()))
+      .map(pokemon => <PokemonCard key={pokemon.id} pokemon={pokemon} />)
     }
 
     return (
@@ -35,21 +39,30 @@ class Pokedex extends Component {
           ?
           <WholePageErrorMessage />
           :
-          <Container>
-            <Row>
+          <Container fluid>
+            <Row style={{padding: "20px 0 0 0"}}>
               <Col xs={12} sm={12} md={12} lg={12} xl={12}>
                 <h1
                   style={{
                     fontFamily: "'Sigmar One', cursive",
-                    color: "white",
-                    padding: "20px"
+                    color: "white"
                   }}
                 >
                   Pokemon Searcher
                 </h1>
               </Col>
             </Row>
-            <Row>
+            <Row style={{padding: "20px 0 10px 0"}}>
+              <Col xs={12} sm={12} md={12} lg={4} xl={4}>
+              </Col>
+              <Col xs={12} sm={12} md={12} lg={4} xl={4} style={{display: "flex", justifyContent: "center", alignItems: "center"}}>
+                <PokemonSearch />
+              </Col>
+              <Col xs={12} sm={12} md={12} lg={4} xl={4}>
+                <ExitButton />
+              </Col>
+            </Row>
+            <Row style={{padding: "10px 0 0 0"}}>
               {pokemonCards}
             </Row>
           </Container>
@@ -63,7 +76,8 @@ const mapStateToProps = state => {
   return {
     pokedex: state.pokedex.pokedex,
     isLoadingPokedex: state.pokedex.isLoadingPokedex,
-    loadPokedexError: state.pokedex.loadPokedexError
+    loadPokedexError: state.pokedex.loadPokedexError,
+    searchTerm: state.pokedex.searchTerm
   }
 }
 

@@ -5,6 +5,7 @@ import Spinner from 'react-bootstrap/Spinner'
 const WholePageSpinner = () => {
   return (
     <Container
+      fluid
       style={{
         minHeight: '100vh',
         display: 'flex',
