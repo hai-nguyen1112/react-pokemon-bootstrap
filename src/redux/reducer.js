@@ -6,7 +6,8 @@ const initialState = {
     pokedex: [],
     isLoadingPokedex: false,
     loadPokedexError: null,
-    searchTerm: ""
+    searchTerm: "",
+    sortOption: ""
   }
 }
 
@@ -47,12 +48,19 @@ const onSearchTermChange = (state, action) => {
   })
 }
 
+const onSortOptionChange = (state, action) => {
+  return updateObject(state, {
+    sortOption: action.sortOption
+  })
+}
+
 const onResetPokedex = (state, action) => {
   return updateObject(state, {
     pokedex: [],
     isLoadingPokedex: false,
     loadPokedexError: null,
-    searchTerm: ""
+    searchTerm: "",
+    sortOption: ""
   })
 }
 
@@ -62,6 +70,7 @@ const pokedexReducer = (state = initialState.pokedex, action) => {
     case actionTypes.FETCH_POKEDEX_SUCCESS: return fetchPokedexSuccess(state, action)
     case actionTypes.FETCH_POKEDEX_FAIL: return fetchPokedexFail(state, action)
     case actionTypes.SEARCH_TERM_WAS_CHANGED: return onSearchTermChange(state, action)
+    case actionTypes.SORT_OPTION_WAS_CHANGED: return onSortOptionChange(state, action)
     case actionTypes.PERSISTED_STATE_WAS_RESET: return onResetPokedex(state, action)
     default: return state
   }

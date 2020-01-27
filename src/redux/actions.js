@@ -51,6 +51,15 @@ export const onSearchTermChange = searchTerm => {
 }
 // end of SEARCH TERM
 
+// start of SORT OPTION
+export const onSortOptionChange = sortOption => {
+  return {
+    type: actionTypes.SORT_OPTION_WAS_CHANGED,
+    sortOption: sortOption
+  }
+}
+// end of SORT OPTION
+
 // start of RESET PERSISTED STATE
 export const onResetPersistedState = () => {
   return {

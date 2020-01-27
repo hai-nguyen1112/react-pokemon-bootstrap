@@ -10,6 +10,7 @@ import Col from 'react-bootstrap/Col'
 import PokemonCard from '../components/PokemonCard'
 import ExitButton from '../helperComponents/ExitButton'
 import PokemonSearch from '../components/PokemonSearch'
+import PokemonSort from '../components/PokemonSort'
 
 class Pokedex extends Component {
   componentDidMount() {
@@ -17,7 +18,7 @@ class Pokedex extends Component {
   }
 
   render() {
-    const {isLoadingPokedex, loadPokedexError, pokedex, searchTerm} = this.props
+    const {isLoadingPokedex, loadPokedexError, pokedex, searchTerm, sortOption} = this.props
 
     let pokemonCards
     if (!isEmpty(pokedex)) {
@@ -25,6 +26,17 @@ class Pokedex extends Component {
       =
       pokedex
       .filter(pokemon => pokemon.name.toLowerCase().includes(searchTerm.toLowerCase()))
+      .sort(
+        sortOption === 'sort-by-name'
+        ?
+        (pokemon1, pokemon2) => pokemon1.name.toLowerCase().localeCompare(pokemon2.name.toLowerCase())
+        :
+        sortOption === 'sort-by-hp'
+        ?
+        (pokemon1, pokemon2) => pokemon1.stats.find(stat => stat.name === 'hp').value - pokemon2.stats.find(stat => stat.name === 'hp').value
+        :
+        () => null
+      )
       .map(pokemon => <PokemonCard key={pokemon.id} pokemon={pokemon} />)
     }
 
@@ -54,6 +66,7 @@ class Pokedex extends Component {
             </Row>
             <Row style={{padding: "20px 0 10px 0"}}>
               <Col xs={12} sm={12} md={12} lg={4} xl={4}>
+                <PokemonSort />
               </Col>
               <Col xs={12} sm={12} md={12} lg={4} xl={4} style={{display: "flex", justifyContent: "center", alignItems: "center"}}>
                 <PokemonSearch />
@@ -77,7 +90,8 @@ const mapStateToProps = state => {
     pokedex: state.pokedex.pokedex,
     isLoadingPokedex: state.pokedex.isLoadingPokedex,
     loadPokedexError: state.pokedex.loadPokedexError,
-    searchTerm: state.pokedex.searchTerm
+    searchTerm: state.pokedex.searchTerm,
+    sortOption: state.pokedex.sortOption
   }
 }
 
