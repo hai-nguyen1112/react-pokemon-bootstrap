@@ -6,7 +6,7 @@ import {connect} from 'react-redux'
 
 const PokemonSearch = ({searchTerm, onSearchTermChange}) => {
   return (
-    <InputGroup className="mb-3" style={{maxWidth: "350px"}}>
+    <InputGroup style={{maxWidth: "350px"}}>
       <InputGroup.Prepend>
         <InputGroup.Text id="basic-addon1"><i className="fas fa-search"></i></InputGroup.Text>
       </InputGroup.Prepend>

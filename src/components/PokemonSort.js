@@ -7,7 +7,7 @@ import ButtonGroup from 'react-bootstrap/ButtonGroup'
 
 const PokemonSort = ({sortOption, onSortOptionChange}) => {
   return (
-    <Dropdown as={ButtonGroup} style={{marginBottom: "20px"}}>
+    <Dropdown as={ButtonGroup}>
       <Button disabled variant="secondary" style={{minWidth: "150px", textAlign: "left"}}>
       {
         sortOption === 'sort-by-name'

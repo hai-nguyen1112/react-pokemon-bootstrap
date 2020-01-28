@@ -64,18 +64,18 @@ class Pokedex extends Component {
                 </h1>
               </Col>
             </Row>
-            <Row style={{padding: "20px 0 10px 0"}}>
-              <Col xs={12} sm={12} md={12} lg={4} xl={4}>
+            <Row style={{margin: "15px 0 0 0"}}>
+              <Col xs={12} sm={12} md={12} lg={4} xl={4} style={{marginBottom: '15px'}}>
                 <PokemonSort />
               </Col>
-              <Col xs={12} sm={12} md={12} lg={4} xl={4} style={{display: "flex", justifyContent: "center", alignItems: "center"}}>
+              <Col xs={12} sm={12} md={12} lg={4} xl={4} style={{marginBottom: '15px', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
                 <PokemonSearch />
               </Col>
-              <Col xs={12} sm={12} md={12} lg={4} xl={4}>
+              <Col xs={12} sm={12} md={12} lg={4} xl={4} style={{marginBottom: '15px'}}>
                 <ExitButton />
               </Col>
             </Row>
-            <Row style={{padding: "10px 0 0 0"}}>
+            <Row style={{margin: "5px 0 0 0"}}>
               {pokemonCards}
             </Row>
           </Container>
