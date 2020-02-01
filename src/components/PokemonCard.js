@@ -1,8 +1,9 @@
 import React, {useState} from 'react'
 import Col from 'react-bootstrap/Col'
 import Card from 'react-bootstrap/Card'
+import {withRouter} from 'react-router-dom'
 
-const PokemonCard = ({pokemon}) => {
+const PokemonCard = ({pokemon, history}) => {
   const [showFront, setShowFront] = useState(true)
 
   return (
@@ -14,6 +15,7 @@ const PokemonCard = ({pokemon}) => {
           marginBottom: "28px",
           borderWidth: "2px"
         }}
+        onClick={() => history.push(`/pokedex/${pokemon.id}`)}
       >
         <Card.Img
           variant="top"
@@ -31,4 +33,4 @@ const PokemonCard = ({pokemon}) => {
   )
 }
 
-export default PokemonCard
+export default withRouter(PokemonCard)
