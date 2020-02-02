@@ -67,3 +67,12 @@ export const onResetPersistedState = () => {
   }
 }
 // end of RESET PERSISTED STATE
+
+// start of EDIT FORM
+export const onEditFormChange = (...updatedValues) => {
+  return {
+    type: actionTypes.EDIT_FORM_WAS_CHANGED,
+    updatedValues: updatedValues
+  }
+}
+// end of EDIT FORM
