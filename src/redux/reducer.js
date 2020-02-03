@@ -75,6 +75,36 @@ const onEditFormChange = (state, action) => {
   })
 }
 
+const editPokemonStart = (state, action) => {
+  return updateObject(state, {
+    isEditingPokemon: action.isEditingPokemon,
+    editPokemonError: action.editPokemonError
+  })
+}
+
+const editPokemonSuccess = (state, action) => {
+  let newPokedex = state.pokedex.map(pokemon => {
+    if (pokemon.id === action.updatedPokemon.id) {
+      return action.updatedPokemon
+    } else {
+      return pokemon
+    }
+  })
+
+  return updateObject(state, {
+    isEditingPokemon: action.isEditingPokemon,
+    editPokemonError: action.editPokemonError,
+    pokedex: newPokedex
+  })
+}
+
+const editPokemonFail = (state, action) => {
+  return updateObject(state, {
+    isEditingPokemon: action.isEditingPokemon,
+    editPokemonError: action.editPokemonError
+  })
+}
+
 const onResetPokedex = (state, action) => {
   return updateObject(state, {
     pokedex: [],
@@ -103,6 +133,9 @@ const pokedexReducer = (state = initialState.pokedex, action) => {
     case actionTypes.SORT_OPTION_WAS_CHANGED: return onSortOptionChange(state, action)
     case actionTypes.PERSISTED_STATE_WAS_RESET: return onResetPokedex(state, action)
     case actionTypes.EDIT_FORM_WAS_CHANGED: return onEditFormChange(state, action)
+    case actionTypes.EDIT_POKEMON_START: return editPokemonStart(state, action)
+    case actionTypes.EDIT_POKEMON_SUCCESS: return editPokemonSuccess(state, action)
+    case actionTypes.EDIT_POKEMON_FAIL: return editPokemonFail(state, action)
     default: return state
   }
 }

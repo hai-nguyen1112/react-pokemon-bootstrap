@@ -1,5 +1,6 @@
 import * as actionTypes from './actionTypes'
 import axios from '../utils/axiosInstance'
+import {isEqual} from 'lodash'
 
 // start of FETCH POKEDEX
 export const fetchPokedex = () => {
@@ -7,7 +8,7 @@ export const fetchPokedex = () => {
     dispatch(fetchPokedexStart())
 
     axios({
-      url: 'pokemon',
+      url: '/pokemon',
       method: 'GET'
     })
     .then(response => dispatch(fetchPokedexSuccess(response.data)))
@@ -76,3 +77,77 @@ export const onEditFormChange = (...updatedValues) => {
   }
 }
 // end of EDIT FORM
+
+// start of EDIT POKEMON
+export const editPokemon = (...updatedValues) => {
+  let updatedData = {}
+  updatedData["stats"] = updatedValues[0].stats
+
+  for (let i = 2; i < updatedValues.length; i++) {
+    if (updatedValues[i][0] === "name") {
+      updatedData["name"] = updatedValues[i][1]
+    } else {
+      updatedData["stats"] = updatedData["stats"].map(stat => {
+        if (stat.name === updatedValues[i][0]) {
+          return {
+            value: updatedValues[i][1],
+            name: updatedValues[i][0]
+          }
+        } else {
+          return stat
+        }
+      })
+    }
+  }
+
+  if (isEqual(updatedData["stats"], updatedValues[0].stats)) {
+    delete updatedData["stats"]
+  }
+
+  return dispatch => {
+    dispatch(editPokemonStart())
+
+    axios({
+      url: `/pokemon/${updatedValues[0].id}`,
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json"
+      },
+      data: {
+        ...updatedData
+      }
+    })
+    .then(response => {
+      dispatch(editPokemonSuccess(response.data))
+      updatedValues[1].push(`/pokedex/${updatedValues[0].id}`)
+    })
+    .catch(error => dispatch(editPokemonFail(error)))
+  }
+}
+
+const editPokemonStart = () => {
+  return {
+    type: actionTypes.EDIT_POKEMON_START,
+    isEditingPokemon: true,
+    editPokemonError: null
+  }
+}
+
+const editPokemonSuccess = updatedPokemon => {
+  return {
+    type: actionTypes.EDIT_POKEMON_SUCCESS,
+    isEditingPokemon: false,
+    editPokemonError: null,
+    updatedPokemon: updatedPokemon
+  }
+}
+
+const editPokemonFail = error => {
+  return {
+    type: actionTypes.EDIT_POKEMON_FAIL,
+    isEditingPokemon: false,
+    editPokemonError: error
+  }
+}
+// end of EDIT POKEMON
