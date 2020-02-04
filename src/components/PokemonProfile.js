@@ -6,8 +6,9 @@ import Col from 'react-bootstrap/Col'
 import Image from 'react-bootstrap/Image'
 import Button from 'react-bootstrap/Button'
 import {onEditFormChange} from '../redux/actions'
+import {onSubmitButtonForEditChange} from '../redux/actions'
 
-const PokemonProfile = ({pokemon, history, onEditFormChange}) => {
+const PokemonProfile = ({pokemon, history, onEditFormChange, changeSubmitButtonForEdit}) => {
   let name = pokemon.name
   let hp = pokemon.stats.find(stat => stat.name === 'hp').value
   let attack = pokemon.stats.find(stat => stat.name === 'attack').value
@@ -67,7 +68,7 @@ const PokemonProfile = ({pokemon, history, onEditFormChange}) => {
             <Button variant="outline-success" onClick={() => history.push("/pokedex")}>Back to Pokedex</Button>
           </Col>
           <Col xs={12} sm={4} md={4} lg={4} xl={4} style={{margin: "20px 0 0 0"}}>
-            <Button variant="outline-warning" onClick={() => {onEditFormChange(['name', name], ['hp', hp], ['attack', attack], ['defense', defense], ['speed', speed]); history.push(`/pokedex/${pokemon.id}/edit`)}}>Edit</Button>
+            <Button variant="outline-warning" onClick={() => {onEditFormChange(['name', name], ['hp', hp], ['attack', attack], ['defense', defense], ['speed', speed]); changeSubmitButtonForEdit(pokemon, {name: name, attack: attack, defense: defense, hp: hp, speed: speed}); history.push(`/pokedex/${pokemon.id}/edit`)}}>Edit</Button>
           </Col>
           <Col xs={12} sm={4} md={4} lg={4} xl={4} style={{margin: "20px 0 0 0"}}>
             <Button variant="outline-danger">Delete</Button>
@@ -86,7 +87,8 @@ const mapStateToProps = (state, props) => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    onEditFormChange: (...updatedValues) => dispatch(onEditFormChange(...updatedValues))
+    onEditFormChange: (...updatedValues) => dispatch(onEditFormChange(...updatedValues)),
+    changeSubmitButtonForEdit: (pokemon, editForm) => dispatch(onSubmitButtonForEditChange(pokemon, editForm))
   }
 }
 

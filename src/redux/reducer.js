@@ -16,7 +16,8 @@ const initialState = {
       speed: ""
     },
     isEditingPokemon: false,
-    editPokemonError: null
+    editPokemonError: null,
+    disableSubmitButtonForEdit: true
   }
 }
 
@@ -75,6 +76,12 @@ const onEditFormChange = (state, action) => {
   })
 }
 
+const onSubmitButtonForEditChange = (state, action) => {
+  return updateObject(state, {
+    disableSubmitButtonForEdit: action.disableSubmitButtonForEdit
+  })
+}
+
 const editPokemonStart = (state, action) => {
   return updateObject(state, {
     isEditingPokemon: action.isEditingPokemon,
@@ -120,7 +127,8 @@ const onResetPokedex = (state, action) => {
       speed: ""
     },
     isEditingPokemon: false,
-    editPokemonError: null
+    editPokemonError: null,
+    disableSubmitButtonForEdit: true
   })
 }
 
@@ -136,6 +144,7 @@ const pokedexReducer = (state = initialState.pokedex, action) => {
     case actionTypes.EDIT_POKEMON_START: return editPokemonStart(state, action)
     case actionTypes.EDIT_POKEMON_SUCCESS: return editPokemonSuccess(state, action)
     case actionTypes.EDIT_POKEMON_FAIL: return editPokemonFail(state, action)
+    case actionTypes.SUBMIT_BUTTON_FOR_EDIT_WAS_CHANGED: return onSubmitButtonForEditChange(state, action)
     default: return state
   }
 }

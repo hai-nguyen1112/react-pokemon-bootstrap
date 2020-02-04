@@ -32,7 +32,7 @@
           "name": "speed"
         },
         {
-          "value": 60,
+          "value": 65,
           "name": "hp"
         }
       ],
@@ -268,7 +268,7 @@
       ],
       "stats": [
         {
-          "value": 65,
+          "value": 60,
           "name": "defense"
         },
         {

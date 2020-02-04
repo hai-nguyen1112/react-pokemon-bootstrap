@@ -1,6 +1,7 @@
 import * as actionTypes from './actionTypes'
 import axios from '../utils/axiosInstance'
 import {isEqual} from 'lodash'
+import isEditFormChanged from '../helperFunctions/isEditFormChanged'
 
 // start of FETCH POKEDEX
 export const fetchPokedex = () => {
@@ -74,6 +75,13 @@ export const onEditFormChange = (...updatedValues) => {
   return {
     type: actionTypes.EDIT_FORM_WAS_CHANGED,
     updatedValues: updatedValues
+  }
+}
+
+export const onSubmitButtonForEditChange = (pokemon, editForm) => {
+  return {
+    type: actionTypes.SUBMIT_BUTTON_FOR_EDIT_WAS_CHANGED,
+    disableSubmitButtonForEdit: isEditFormChanged(pokemon, editForm)
   }
 }
 // end of EDIT FORM
