@@ -51,6 +51,8 @@ class Pokedex extends Component {
           ?
           <WholePageErrorMessage />
           :
+          !isEmpty(pokedex)
+          ?
           <Container fluid>
             <Row style={{padding: "20px 0 0 0"}}>
               <Col xs={12} sm={12} md={12} lg={12} xl={12}>
@@ -79,6 +81,8 @@ class Pokedex extends Component {
               {pokemonCards}
             </Row>
           </Container>
+          :
+          null
         }
       </>
     )

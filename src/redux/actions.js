@@ -1,7 +1,5 @@
 import * as actionTypes from './actionTypes'
 import axios from '../utils/axiosInstance'
-import {isEqual} from 'lodash'
-import isEditFormChanged from '../helperFunctions/isEditFormChanged'
 
 // start of FETCH POKEDEX
 export const fetchPokedex = () => {
@@ -70,53 +68,14 @@ export const onResetPersistedState = () => {
 }
 // end of RESET PERSISTED STATE
 
-// start of EDIT FORM
-export const onEditFormChange = (...updatedValues) => {
-  return {
-    type: actionTypes.EDIT_FORM_WAS_CHANGED,
-    updatedValues: updatedValues
-  }
-}
-
-export const onSubmitButtonForEditChange = (pokemon, editForm) => {
-  return {
-    type: actionTypes.SUBMIT_BUTTON_FOR_EDIT_WAS_CHANGED,
-    disableSubmitButtonForEdit: isEditFormChanged(pokemon, editForm)
-  }
-}
-// end of EDIT FORM
-
 // start of EDIT POKEMON
-export const editPokemon = (...updatedValues) => {
-  let updatedData = {}
-  updatedData["stats"] = updatedValues[0].stats
-
-  for (let i = 2; i < updatedValues.length; i++) {
-    if (updatedValues[i][0] === "name") {
-      updatedData["name"] = updatedValues[i][1]
-    } else {
-      updatedData["stats"] = updatedData["stats"].map(stat => {
-        if (stat.name === updatedValues[i][0]) {
-          return {
-            value: updatedValues[i][1],
-            name: updatedValues[i][0]
-          }
-        } else {
-          return stat
-        }
-      })
-    }
-  }
-
-  if (isEqual(updatedData["stats"], updatedValues[0].stats)) {
-    delete updatedData["stats"]
-  }
-
+export const editPokemon = (id, history, updatedData) => {
+  console.log(updatedData)
   return dispatch => {
     dispatch(editPokemonStart())
 
     axios({
-      url: `/pokemon/${updatedValues[0].id}`,
+      url: `/pokemon/${id}`,
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
@@ -128,7 +87,7 @@ export const editPokemon = (...updatedValues) => {
     })
     .then(response => {
       dispatch(editPokemonSuccess(response.data))
-      updatedValues[1].push(`/pokedex/${updatedValues[0].id}`)
+      history.push(`/pokedex/${id}`)
     })
     .catch(error => dispatch(editPokemonFail(error)))
   }

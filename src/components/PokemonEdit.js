@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState} from 'react'
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
@@ -6,51 +6,151 @@ import Image from 'react-bootstrap/Image'
 import Button from 'react-bootstrap/Button'
 import {connect} from 'react-redux'
 import Form from 'react-bootstrap/Form'
-import {onEditFormChange, editPokemon} from '../redux/actions'
+import {editPokemon} from '../redux/actions'
 import WholePageSpinner from '../helperComponents/WholePageSpinner'
 import WholePageErrorMessage from '../helperComponents/WholePageErrorMessage'
-import {isEmpty} from 'lodash'
-import {onSubmitButtonForEditChange} from '../redux/actions'
+import {isEmpty, isEqual} from 'lodash'
+import isEditFormChanged from '../helperFunctions/isEditFormChanged'
 
-const PokemonEdit = ({pokemon, editForm, history, onEditFormChange, editPokemon, isEditingPokemon, editPokemonError, disableSubmitButtonForEdit, changeSubmitButtonForEdit}) => {
-  const {name, hp, attack, defense, speed} = editForm
+const PokemonEdit = ({pokemon, history, editPokemon, isEditingPokemon, editPokemonError}) => {
+  const [name, setName] = useState(!isEmpty(pokemon) ? pokemon.name : null)
+  const [hp, setHp] = useState(!isEmpty(pokemon) ? pokemon.stats.find(stat => stat.name === 'hp').value : null)
+  const [attack, setAttack] = useState(!isEmpty(pokemon) ? pokemon.stats.find(stat => stat.name === 'attack').value : null)
+  const [defense, setDefense] = useState(!isEmpty(pokemon) ? pokemon.stats.find(stat => stat.name === 'defense').value : null)
+  const [speed, setSpeed] = useState(!isEmpty(pokemon) ? pokemon.stats.find(stat => stat.name === 'speed').value : null)
+  const [disableSubmitButton, setDisableSubmitButton] = useState(true)
 
   const handleChange = e => {
-    if (e.target.name === "name") {
-      onEditFormChange([e.target.name, e.target.value.toLowerCase()])
-      changeSubmitButtonForEdit(pokemon, Object.assign({}, editForm, {[e.target.name]: e.target.value.toLowerCase()}))
-    } else {
-      if (!isEmpty(e.target.value)) {
-        onEditFormChange([e.target.name, parseInt(e.target.value, 10)])
-        changeSubmitButtonForEdit(pokemon, Object.assign({}, editForm, {[e.target.name]: parseInt(e.target.value, 10)}))
+    if (e.target.name === 'name') {
+      setName(e.target.value)
+      let editForm = {
+        name: e.target.value,
+        hp: hp,
+        attack: attack,
+        defense: defense,
+        speed: speed
+      }
+      if (isEditFormChanged(pokemon, editForm)) {
+        setDisableSubmitButton(false)
       } else {
-        onEditFormChange([e.target.name, e.target.value])
-        changeSubmitButtonForEdit(pokemon, Object.assign({}, editForm, {[e.target.name]: e.target.value}))
+        setDisableSubmitButton(true)
+      }
+    }
+
+    if (e.target.name === 'hp') {
+      let newHp
+      if (isEmpty(e.target.value)) {
+        newHp = e.target.value
+      } else {
+        newHp = parseInt(e.target.value, 10)
+      }
+      setHp(newHp)
+      let editForm = {
+        name: name,
+        hp: newHp,
+        attack: attack,
+        defense: defense,
+        speed: speed
+      }
+      if (isEditFormChanged(pokemon, editForm)) {
+        setDisableSubmitButton(false)
+      } else {
+        setDisableSubmitButton(true)
+      }
+    }
+
+    if (e.target.name === 'attack') {
+      let newAttack
+      if (isEmpty(e.target.value)) {
+        newAttack = e.target.value
+      } else {
+        newAttack = parseInt(e.target.value, 10)
+      }
+      setAttack(newAttack)
+      let editForm = {
+        name: name,
+        hp: hp,
+        attack: newAttack,
+        defense: defense,
+        speed: speed
+      }
+      if (isEditFormChanged(pokemon, editForm)) {
+        setDisableSubmitButton(false)
+      } else {
+        setDisableSubmitButton(true)
+      }
+    }
+
+    if (e.target.name === 'defense') {
+      let newDefense
+      if (isEmpty(e.target.value)) {
+        newDefense = e.target.value
+      } else {
+        newDefense = parseInt(e.target.value, 10)
+      }
+      setDefense(newDefense)
+      let editForm = {
+        name: name,
+        hp: hp,
+        attack: attack,
+        defense: newDefense,
+        speed: speed
+      }
+      if (isEditFormChanged(pokemon, editForm)) {
+        setDisableSubmitButton(false)
+      } else {
+        setDisableSubmitButton(true)
+      }
+    }
+
+    if (e.target.name === 'speed') {
+      let newSpeed
+      if (isEmpty(e.target.value)) {
+        newSpeed = e.target.value
+      } else {
+        newSpeed = parseInt(e.target.value, 10)
+      }
+      setSpeed(newSpeed)
+      let editForm = {
+        name: name,
+        hp: hp,
+        attack: attack,
+        defense: defense,
+        speed: newSpeed
+      }
+      if (isEditFormChanged(pokemon, editForm)) {
+        setDisableSubmitButton(false)
+      } else {
+        setDisableSubmitButton(true)
       }
     }
   }
 
   const handleSubmit = e => {
     e.preventDefault()
-    let updatedValues = []
-    updatedValues.push(pokemon)
-    updatedValues.push(history)
-    if (pokemon.name.toLowerCase() !== name) {
-      updatedValues.push(["name", name])
+    let updatedData = {}
+    updatedData["stats"] = JSON.parse(JSON.stringify(pokemon.stats))
+    if (pokemon.name.toLowerCase() !== name.toLowerCase()) {
+      updatedData["name"] = name.toLowerCase()
     }
-    if (pokemon.stats.find(stat => stat.name === 'hp').value !== hp) {
-      updatedValues.push(["hp", hp])
+    if (pokemon.stats.find(stat => stat.name === "hp").value !== parseInt(hp, 10)) {
+      updatedData["stats"].find(stat => stat.name === "hp").value = parseInt(hp, 10)
     }
-    if (pokemon.stats.find(stat => stat.name === 'attack').value !== attack) {
-      updatedValues.push(["attack", attack])
+    if (pokemon.stats.find(stat => stat.name === "attack").value !== parseInt(attack, 10)) {
+      updatedData["stats"].find(stat => stat.name === "attack").value = parseInt(attack, 10)
     }
-    if (pokemon.stats.find(stat => stat.name === 'defense').value !== defense) {
-      updatedValues.push(["defense", defense])
+    if (pokemon.stats.find(stat => stat.name === "defense").value !== parseInt(defense, 10)) {
+      updatedData["stats"].find(stat => stat.name === "defense").value = parseInt(defense, 10)
     }
-    if (pokemon.stats.find(stat => stat.name === 'speed').value !== speed) {
-      updatedValues.push(["speed", speed])
+    if (pokemon.stats.find(stat => stat.name === "speed").value !== parseInt(speed, 10)) {
+      updatedData["stats"].find(stat => stat.name === "speed").value = parseInt(speed, 10)
     }
-    editPokemon(...updatedValues)
+
+    if (isEqual(pokemon.stats, updatedData.stats)) {
+      delete updatedData.stats
+    }
+
+    editPokemon(pokemon.id, history, updatedData)
   }
 
   return (
@@ -64,6 +164,8 @@ const PokemonEdit = ({pokemon, editForm, history, onEditFormChange, editPokemon,
         ?
         <WholePageErrorMessage />
         :
+        !isEmpty(pokemon)
+        ?
         <Container
           fluid
           style={{
@@ -152,12 +254,14 @@ const PokemonEdit = ({pokemon, editForm, history, onEditFormChange, editPokemon,
                   <Button variant="outline-warning" onClick={() => history.goBack()}>Cancel</Button>
                 </Col>
                 <Col xs={12} sm={6} md={6} lg={6} xl={6} style={{margin: "20px 0 0 0"}}>
-                  <Button type="submit" variant="outline-success" disabled={disableSubmitButtonForEdit}>Submit</Button>
+                  <Button type="submit" variant="outline-success" disabled={disableSubmitButton}>Submit</Button>
                 </Col>
               </Row>
             </Form>
           </Container>
         </Container>
+        :
+        null
       }
     </>
   )
@@ -166,18 +270,14 @@ const PokemonEdit = ({pokemon, editForm, history, onEditFormChange, editPokemon,
 const mapStateToProps = (state, props) => {
   return {
     pokemon: state.pokedex.pokedex.find(pokemon => pokemon.id === parseInt(props.match.params.id, 10)),
-    editForm: state.pokedex.editForm,
     isEditingPokemon: state.pokedex.isEditingPokemon,
-    editPokemonError: state.pokedex.editPokemonError,
-    disableSubmitButtonForEdit: state.pokedex.disableSubmitButtonForEdit
+    editPokemonError: state.pokedex.editPokemonError
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
-    onEditFormChange: (...updatedValues) => dispatch(onEditFormChange(...updatedValues)),
-    editPokemon: (...updatedValues) => dispatch(editPokemon(...updatedValues)),
-    changeSubmitButtonForEdit: (pokemon, editForm) => dispatch(onSubmitButtonForEditChange(pokemon, editForm))
+    editPokemon: (id, history, updatedData) => dispatch(editPokemon(id, history, updatedData))
   }
 }
 

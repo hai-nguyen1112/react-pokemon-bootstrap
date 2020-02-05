@@ -8,16 +8,8 @@ const initialState = {
     loadPokedexError: null,
     searchTerm: "",
     sortOption: "",
-    editForm: {
-      name: "",
-      hp: "",
-      attack: "",
-      defense: "",
-      speed: ""
-    },
     isEditingPokemon: false,
-    editPokemonError: null,
-    disableSubmitButtonForEdit: true
+    editPokemonError: null
   }
 }
 
@@ -64,24 +56,6 @@ const onSortOptionChange = (state, action) => {
   })
 }
 
-const onEditFormChange = (state, action) => {
-  let newForm = JSON.parse(JSON.stringify(state.editForm))
-  let updatedValues = {}
-  for (const value of action.updatedValues) {
-    updatedValues[value[0]] = value[1]
-  }
-  newForm = {...newForm, ...updatedValues}
-  return updateObject(state, {
-    editForm: newForm
-  })
-}
-
-const onSubmitButtonForEditChange = (state, action) => {
-  return updateObject(state, {
-    disableSubmitButtonForEdit: action.disableSubmitButtonForEdit
-  })
-}
-
 const editPokemonStart = (state, action) => {
   return updateObject(state, {
     isEditingPokemon: action.isEditingPokemon,
@@ -119,16 +93,8 @@ const onResetPokedex = (state, action) => {
     loadPokedexError: null,
     searchTerm: "",
     sortOption: "",
-    editForm: {
-      name: "",
-      hp: "",
-      attack: "",
-      defense: "",
-      speed: ""
-    },
     isEditingPokemon: false,
-    editPokemonError: null,
-    disableSubmitButtonForEdit: true
+    editPokemonError: null
   })
 }
 
@@ -140,11 +106,9 @@ const pokedexReducer = (state = initialState.pokedex, action) => {
     case actionTypes.SEARCH_TERM_WAS_CHANGED: return onSearchTermChange(state, action)
     case actionTypes.SORT_OPTION_WAS_CHANGED: return onSortOptionChange(state, action)
     case actionTypes.PERSISTED_STATE_WAS_RESET: return onResetPokedex(state, action)
-    case actionTypes.EDIT_FORM_WAS_CHANGED: return onEditFormChange(state, action)
     case actionTypes.EDIT_POKEMON_START: return editPokemonStart(state, action)
     case actionTypes.EDIT_POKEMON_SUCCESS: return editPokemonSuccess(state, action)
     case actionTypes.EDIT_POKEMON_FAIL: return editPokemonFail(state, action)
-    case actionTypes.SUBMIT_BUTTON_FOR_EDIT_WAS_CHANGED: return onSubmitButtonForEditChange(state, action)
     default: return state
   }
 }
