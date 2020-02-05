@@ -11,6 +11,7 @@ import PokemonCard from '../components/PokemonCard'
 import ExitButton from '../helperComponents/ExitButton'
 import PokemonSearch from '../components/PokemonSearch'
 import PokemonSort from '../components/PokemonSort'
+import PokemonAdd from '../components/PokemonAdd'
 
 class Pokedex extends Component {
   componentDidMount() {
@@ -77,6 +78,7 @@ class Pokedex extends Component {
                 <ExitButton />
               </Col>
             </Row>
+            <PokemonAdd />
             <Row style={{margin: "5px 0 0 0"}}>
               {pokemonCards}
             </Row>
