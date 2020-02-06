@@ -12,6 +12,7 @@ import WholePageErrorMessage from '../helperComponents/WholePageErrorMessage'
 import {isEmpty} from 'lodash'
 import isEditFormChanged from '../helperFunctions/isEditFormChanged'
 import generateEditData from '../helperFunctions/generateEditData'
+import integerInputValidation from '../helperFunctions/integerInputValidation'
 
 const PokemonEdit = ({pokemon, history, editPokemon, isEditingPokemon, editPokemonError}) => {
   const [name, setName] = useState(!isEmpty(pokemon) ? pokemon.name : null)
@@ -129,6 +130,7 @@ const PokemonEdit = ({pokemon, history, editPokemon, isEditingPokemon, editPokem
                               setDisableSubmitButton(true)
                             }
                           }}
+                          onKeyDown={e => integerInputValidation(e)}
                           required
                         />
                       </Col>
@@ -170,6 +172,7 @@ const PokemonEdit = ({pokemon, history, editPokemon, isEditingPokemon, editPokem
                               setDisableSubmitButton(true)
                             }
                           }}
+                          onKeyDown={e => integerInputValidation(e)}
                           required
                         />
                       </Col>
@@ -211,6 +214,7 @@ const PokemonEdit = ({pokemon, history, editPokemon, isEditingPokemon, editPokem
                               setDisableSubmitButton(true)
                             }
                           }}
+                          onKeyDown={e => integerInputValidation(e)}
                           required
                         />
                       </Col>
@@ -252,6 +256,7 @@ const PokemonEdit = ({pokemon, history, editPokemon, isEditingPokemon, editPokem
                               setDisableSubmitButton(true)
                             }
                           }}
+                          onKeyDown={e => integerInputValidation(e)}
                           required
                         />
                       </Col>

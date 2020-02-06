@@ -5,6 +5,10 @@ import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
 import Card from 'react-bootstrap/Card'
 import Collapse from 'react-bootstrap/Collapse'
+import integerInputValidation from '../helperFunctions/integerInputValidation'
+import {isEmpty} from 'lodash'
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
+import Popover from 'react-bootstrap/Popover'
 
 const PokemonAdd = () => {
   const [open, setOpen] = useState(false)
@@ -30,6 +34,14 @@ const PokemonAdd = () => {
       clearState()
     }
   }
+
+  const pokemonNumberInputPopover = (
+    <Popover id="popover-basic">
+      <Popover.Content style={{fontFamily: "'Open Sans Condensed', sans-serif", fontSize: "20px"}}>
+        Enter a number between 1 and 649 to see pokemon's front and back images.
+      </Popover.Content>
+    </Popover>
+  )
 
   return (
     <Card bg="info" text="white" style={{margin: "5px 19px 19px 19px"}}>
@@ -57,20 +69,55 @@ const PokemonAdd = () => {
                 <Row>
                   <Col xs={6} sm={6} md={6} lg={6} xl={6}>
                     <Card>
-                      <Card.Img variant="top" src={parseInt(pokemonNumber) > 0 && parseInt(pokemonNumber) < 808 ? `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemonNumber}.png` : "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/0.png"} />
+                      <Card.Img
+                        variant="top"
+                        src={
+                          parseInt(pokemonNumber) > 0 && parseInt(pokemonNumber) < 808
+                          ?
+                          `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemonNumber}.png`
+                          :
+                          "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/0.png"
+                        }
+                      />
                     </Card>
                   </Col>
                   <Col xs={6} sm={6} md={6} lg={6} xl={6}>
                     <Card>
-                      <Card.Img variant="top" src={parseInt(pokemonNumber) > 0 && parseInt(pokemonNumber) < 808 ? `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/${pokemonNumber}.png` : "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/0.png"} />
+                      <Card.Img
+                        variant="top"
+                        src={
+                          parseInt(pokemonNumber) > 0 && parseInt(pokemonNumber) < 808
+                          ?
+                          `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/${pokemonNumber}.png`
+                          :
+                          "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/0.png"
+                        }
+                      />
                     </Card>
                   </Col>
                 </Row>
                 <Row style={{marginTop: "25px"}}>
                   <Col xs={12} sm={12} md={12} lg={12} xl={12}>
-                    <p style={{color: "white", fontFamily: "'Sigmar One', cursive"}}>
-                      <Form.Control type="number" min="1" max="807" step="1" name="pokemonNumber" placeholder="Enter a number for new pokemon" value={pokemonNumber} onChange={e => setPokemonNumber(e.target.value)} required />
-                    </p>
+                    <OverlayTrigger trigger="hover" placement="bottom" overlay={pokemonNumberInputPopover}>
+                      <p style={{color: "white", fontFamily: "'Sigmar One', cursive"}}>
+                        <Form.Control
+                          type="number"
+                          min="1"
+                          max="649"
+                          step="1"
+                          name="pokemonNumber"
+                          placeholder="Enter a number"
+                          value={pokemonNumber}
+                          onChange={e => {
+                            if (parseInt(e.target.value, 10) < 650 || isEmpty(e.target.value)) {
+                              setPokemonNumber(e.target.value)
+                            }
+                          }}
+                          onKeyDown={e => integerInputValidation(e)}
+                          required
+                        />
+                      </p>
+                    </OverlayTrigger>
                   </Col>
                 </Row>
               </Col>
@@ -81,7 +128,15 @@ const PokemonAdd = () => {
                       Name
                     </Form.Label>
                     <Col xs={7} sm={7} md={7} lg={7} xl={7} style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-                      <Form.Control type="text" maxLength="20" name="name" placeholder="Enter name" value={name} onChange={e => setName(e.target.value)} required />
+                      <Form.Control
+                        type="text"
+                        maxLength="20"
+                        name="name"
+                        placeholder="Enter name"
+                        value={name}
+                        onChange={e => setName(e.target.value)}
+                        required
+                      />
                     </Col>
                   </Form.Group>
                 </h4>
@@ -91,7 +146,18 @@ const PokemonAdd = () => {
                       HP
                     </Form.Label>
                     <Col xs={7} sm={7} md={7} lg={7} xl={7} style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-                      <Form.Control type="number" min="1" max="200" step="1" name="hp" placeholder="Enter hp" value={hp} onChange={e => setHp(e.target.value)} required />
+                      <Form.Control
+                        type="number"
+                        min="1"
+                        max="200"
+                        step="1"
+                        name="hp"
+                        placeholder="Enter hp"
+                        value={hp}
+                        onChange={e => setHp(e.target.value)}
+                        onKeyDown={e => integerInputValidation(e)}
+                        required
+                      />
                     </Col>
                   </Form.Group>
                 </h4>
@@ -101,7 +167,18 @@ const PokemonAdd = () => {
                       ATK
                     </Form.Label>
                     <Col xs={7} sm={7} md={7} lg={7} xl={7} style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-                      <Form.Control type="number" min="1" max="150" step="1" name="attack" placeholder="Enter attack" value={attack} onChange={e => setAttack(e.target.value)} required />
+                      <Form.Control
+                        type="number"
+                        min="1"
+                        max="150"
+                        step="1"
+                        name="attack"
+                        placeholder="Enter attack"
+                        value={attack}
+                        onChange={e => setAttack(e.target.value)}
+                        onKeyDown={e => integerInputValidation(e)}
+                        required
+                      />
                     </Col>
                   </Form.Group>
                 </h4>
@@ -111,7 +188,18 @@ const PokemonAdd = () => {
                       DEF
                     </Form.Label>
                     <Col xs={7} sm={7} md={7} lg={7} xl={7} style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-                      <Form.Control type="number" min="1" max="150" step="1" name="defense" placeholder="Enter defense" value={defense} onChange={e => setDefense(e.target.value)} required />
+                      <Form.Control
+                        type="number"
+                        min="1"
+                        max="150"
+                        step="1"
+                        name="defense"
+                        placeholder="Enter defense"
+                        value={defense}
+                        onChange={e => setDefense(e.target.value)}
+                        onKeyDown={e => integerInputValidation(e)}
+                        required
+                      />
                     </Col>
                   </Form.Group>
                 </h4>
@@ -121,7 +209,18 @@ const PokemonAdd = () => {
                       SPD
                     </Form.Label>
                     <Col xs={7} sm={7} md={7} lg={7} xl={7} style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-                      <Form.Control type="number" min="1" max="150" step="1" name="speed" placeholder="Enter speed" value={speed} onChange={e => setSpeed(e.target.value)} required />
+                      <Form.Control
+                        type="number"
+                        min="1"
+                        max="150"
+                        step="1"
+                        name="speed"
+                        placeholder="Enter speed"
+                        value={speed}
+                        onChange={e => setSpeed(e.target.value)}
+                        onKeyDown={e => integerInputValidation(e)}
+                        required
+                      />
                     </Col>
                   </Form.Group>
                 </h4>
