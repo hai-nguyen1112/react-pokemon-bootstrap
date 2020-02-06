@@ -46,7 +46,7 @@ const PokemonAdd = () => {
             <i className="fas fa-arrow-circle-down"></i>
           }
           &nbsp;
-          Add New Pokemon
+          Add Pokemon
         </h4>
       </Card.Header>
       <Collapse in={open}>

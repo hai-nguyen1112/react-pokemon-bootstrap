@@ -69,8 +69,7 @@ export const onResetPersistedState = () => {
 // end of RESET PERSISTED STATE
 
 // start of EDIT POKEMON
-export const editPokemon = (id, history, updatedData) => {
-  console.log(updatedData)
+export const editPokemon = (id, history, editData) => {
   return dispatch => {
     dispatch(editPokemonStart())
 
@@ -82,7 +81,7 @@ export const editPokemon = (id, history, updatedData) => {
         "Accept": "application/json"
       },
       data: {
-        ...updatedData
+        ...editData
       }
     })
     .then(response => {

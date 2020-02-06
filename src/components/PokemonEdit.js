@@ -9,8 +9,9 @@ import Form from 'react-bootstrap/Form'
 import {editPokemon} from '../redux/actions'
 import WholePageSpinner from '../helperComponents/WholePageSpinner'
 import WholePageErrorMessage from '../helperComponents/WholePageErrorMessage'
-import {isEmpty, isEqual} from 'lodash'
+import {isEmpty} from 'lodash'
 import isEditFormChanged from '../helperFunctions/isEditFormChanged'
+import generateEditData from '../helperFunctions/generateEditData'
 
 const PokemonEdit = ({pokemon, history, editPokemon, isEditingPokemon, editPokemonError}) => {
   const [name, setName] = useState(!isEmpty(pokemon) ? pokemon.name : null)
@@ -20,137 +21,9 @@ const PokemonEdit = ({pokemon, history, editPokemon, isEditingPokemon, editPokem
   const [speed, setSpeed] = useState(!isEmpty(pokemon) ? pokemon.stats.find(stat => stat.name === 'speed').value : null)
   const [disableSubmitButton, setDisableSubmitButton] = useState(true)
 
-  const handleChange = e => {
-    if (e.target.name === 'name') {
-      setName(e.target.value)
-      let editForm = {
-        name: e.target.value,
-        hp: hp,
-        attack: attack,
-        defense: defense,
-        speed: speed
-      }
-      if (isEditFormChanged(pokemon, editForm)) {
-        setDisableSubmitButton(false)
-      } else {
-        setDisableSubmitButton(true)
-      }
-    }
-
-    if (e.target.name === 'hp') {
-      let newHp
-      if (isEmpty(e.target.value)) {
-        newHp = e.target.value
-      } else {
-        newHp = parseInt(e.target.value, 10)
-      }
-      setHp(newHp)
-      let editForm = {
-        name: name,
-        hp: newHp,
-        attack: attack,
-        defense: defense,
-        speed: speed
-      }
-      if (isEditFormChanged(pokemon, editForm)) {
-        setDisableSubmitButton(false)
-      } else {
-        setDisableSubmitButton(true)
-      }
-    }
-
-    if (e.target.name === 'attack') {
-      let newAttack
-      if (isEmpty(e.target.value)) {
-        newAttack = e.target.value
-      } else {
-        newAttack = parseInt(e.target.value, 10)
-      }
-      setAttack(newAttack)
-      let editForm = {
-        name: name,
-        hp: hp,
-        attack: newAttack,
-        defense: defense,
-        speed: speed
-      }
-      if (isEditFormChanged(pokemon, editForm)) {
-        setDisableSubmitButton(false)
-      } else {
-        setDisableSubmitButton(true)
-      }
-    }
-
-    if (e.target.name === 'defense') {
-      let newDefense
-      if (isEmpty(e.target.value)) {
-        newDefense = e.target.value
-      } else {
-        newDefense = parseInt(e.target.value, 10)
-      }
-      setDefense(newDefense)
-      let editForm = {
-        name: name,
-        hp: hp,
-        attack: attack,
-        defense: newDefense,
-        speed: speed
-      }
-      if (isEditFormChanged(pokemon, editForm)) {
-        setDisableSubmitButton(false)
-      } else {
-        setDisableSubmitButton(true)
-      }
-    }
-
-    if (e.target.name === 'speed') {
-      let newSpeed
-      if (isEmpty(e.target.value)) {
-        newSpeed = e.target.value
-      } else {
-        newSpeed = parseInt(e.target.value, 10)
-      }
-      setSpeed(newSpeed)
-      let editForm = {
-        name: name,
-        hp: hp,
-        attack: attack,
-        defense: defense,
-        speed: newSpeed
-      }
-      if (isEditFormChanged(pokemon, editForm)) {
-        setDisableSubmitButton(false)
-      } else {
-        setDisableSubmitButton(true)
-      }
-    }
-  }
-
   const handleSubmit = e => {
     e.preventDefault()
-    let updatedData = {}
-    updatedData["stats"] = JSON.parse(JSON.stringify(pokemon.stats))
-    if (pokemon.name.toLowerCase() !== name.toLowerCase()) {
-      updatedData["name"] = name.toLowerCase()
-    }
-    if (pokemon.stats.find(stat => stat.name === "hp").value !== parseInt(hp, 10)) {
-      updatedData["stats"].find(stat => stat.name === "hp").value = parseInt(hp, 10)
-    }
-    if (pokemon.stats.find(stat => stat.name === "attack").value !== parseInt(attack, 10)) {
-      updatedData["stats"].find(stat => stat.name === "attack").value = parseInt(attack, 10)
-    }
-    if (pokemon.stats.find(stat => stat.name === "defense").value !== parseInt(defense, 10)) {
-      updatedData["stats"].find(stat => stat.name === "defense").value = parseInt(defense, 10)
-    }
-    if (pokemon.stats.find(stat => stat.name === "speed").value !== parseInt(speed, 10)) {
-      updatedData["stats"].find(stat => stat.name === "speed").value = parseInt(speed, 10)
-    }
-
-    if (isEqual(pokemon.stats, updatedData.stats)) {
-      delete updatedData.stats
-    }
-
-    editPokemon(pokemon.id, history, updatedData)
+    editPokemon(pokemon.id, history, generateEditData(pokemon, name, hp, attack, defense, speed))
   }
 
   return (
@@ -195,7 +68,28 @@ const PokemonEdit = ({pokemon, history, editPokemon, isEditingPokemon, editPokem
                         Name
                       </Form.Label>
                       <Col xs={8} sm={8} md={8} lg={8} xl={8} style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-                        <Form.Control type="text" maxLength="20" name="name" value={name} onChange={handleChange} required />
+                        <Form.Control
+                          type="text"
+                          maxLength="20"
+                          name="name"
+                          value={name}
+                          onChange={e => {
+                            setName(e.target.value)
+                            let editForm = {
+                              name: e.target.value.toLowerCase(),
+                              hp: hp,
+                              attack: attack,
+                              defense: defense,
+                              speed: speed
+                            }
+                            if (isEditFormChanged(pokemon, editForm)) {
+                              setDisableSubmitButton(false)
+                            } else {
+                              setDisableSubmitButton(true)
+                            }
+                          }}
+                          required
+                        />
                       </Col>
                     </Form.Group>
                   </h1>
@@ -207,7 +101,36 @@ const PokemonEdit = ({pokemon, history, editPokemon, isEditingPokemon, editPokem
                         HP
                       </Form.Label>
                       <Col xs={8} sm={8} md={8} lg={8} xl={8} style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-                        <Form.Control type="number" min="1" max="200" step="1" name="hp" value={hp} onChange={handleChange} required />
+                        <Form.Control
+                          type="number"
+                          min="1"
+                          max="200"
+                          step="1"
+                          name="hp"
+                          value={hp}
+                          onChange={e => {
+                            let newHp
+                            if (isEmpty(e.target.value)) {
+                              newHp = e.target.value
+                            } else {
+                              newHp = parseInt(e.target.value)
+                            }
+                            setHp(newHp)
+                            let editForm = {
+                              hp: newHp,
+                              name: name,
+                              attack: attack,
+                              defense: defense,
+                              speed: speed
+                            }
+                            if (isEditFormChanged(pokemon, editForm)) {
+                              setDisableSubmitButton(false)
+                            } else {
+                              setDisableSubmitButton(true)
+                            }
+                          }}
+                          required
+                        />
                       </Col>
                     </Form.Group>
                   </h1>
@@ -219,7 +142,36 @@ const PokemonEdit = ({pokemon, history, editPokemon, isEditingPokemon, editPokem
                         ATK
                       </Form.Label>
                       <Col xs={7} sm={7} md={7} lg={7} xl={7} style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-                        <Form.Control type="number" min="1" max="150" step="1" name="attack" value={attack} onChange={handleChange} required />
+                        <Form.Control
+                          type="number"
+                          min="1"
+                          max="150"
+                          step="1"
+                          name="attack"
+                          value={attack}
+                          onChange={e => {
+                            let newAttack
+                            if (isEmpty(e.target.value)) {
+                              newAttack = e.target.value
+                            } else {
+                              newAttack = parseInt(e.target.value)
+                            }
+                            setAttack(newAttack)
+                            let editForm = {
+                              attack: newAttack,
+                              hp: hp,
+                              name: name,
+                              defense: defense,
+                              speed: speed
+                            }
+                            if (isEditFormChanged(pokemon, editForm)) {
+                              setDisableSubmitButton(false)
+                            } else {
+                              setDisableSubmitButton(true)
+                            }
+                          }}
+                          required
+                        />
                       </Col>
                     </Form.Group>
                   </h1>
@@ -231,7 +183,36 @@ const PokemonEdit = ({pokemon, history, editPokemon, isEditingPokemon, editPokem
                         DEF
                       </Form.Label>
                       <Col xs={7} sm={7} md={7} lg={7} xl={7} style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-                        <Form.Control type="number" min="1" max="150" step="1" name="defense" value={defense} onChange={handleChange} required />
+                        <Form.Control
+                          type="number"
+                          min="1"
+                          max="150"
+                          step="1"
+                          name="defense"
+                          value={defense}
+                          onChange={e => {
+                            let newDefense
+                            if (isEmpty(e.target.value)) {
+                              newDefense = e.target.value
+                            } else {
+                              newDefense = parseInt(e.target.value)
+                            }
+                            setDefense(newDefense)
+                            let editForm = {
+                              defense: newDefense,
+                              hp: hp,
+                              attack: attack,
+                              name: name,
+                              speed: speed
+                            }
+                            if (isEditFormChanged(pokemon, editForm)) {
+                              setDisableSubmitButton(false)
+                            } else {
+                              setDisableSubmitButton(true)
+                            }
+                          }}
+                          required
+                        />
                       </Col>
                     </Form.Group>
                   </h1>
@@ -243,7 +224,36 @@ const PokemonEdit = ({pokemon, history, editPokemon, isEditingPokemon, editPokem
                         SPD
                       </Form.Label>
                       <Col xs={7} sm={7} md={7} lg={7} xl={7} style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-                        <Form.Control type="number" min="1" max="150" step="1" name="speed" value={speed} onChange={handleChange} required />
+                        <Form.Control
+                          type="number"
+                          min="1"
+                          max="150"
+                          step="1"
+                          name="speed"
+                          value={speed}
+                          onChange={e => {
+                            let newSpeed
+                            if (isEmpty(e.target.value)) {
+                              newSpeed = e.target.value
+                            } else {
+                              newSpeed = parseInt(e.target.value)
+                            }
+                            setSpeed(newSpeed)
+                            let editForm = {
+                              speed: newSpeed,
+                              hp: hp,
+                              attack: attack,
+                              defense: defense,
+                              name: name
+                            }
+                            if (isEditFormChanged(pokemon, editForm)) {
+                              setDisableSubmitButton(false)
+                            } else {
+                              setDisableSubmitButton(true)
+                            }
+                          }}
+                          required
+                        />
                       </Col>
                     </Form.Group>
                   </h1>
@@ -277,7 +287,7 @@ const mapStateToProps = (state, props) => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    editPokemon: (id, history, updatedData) => dispatch(editPokemon(id, history, updatedData))
+    editPokemon: (id, history, editData) => dispatch(editPokemon(id, history, editData))
   }
 }
 
