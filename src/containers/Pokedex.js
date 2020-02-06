@@ -19,7 +19,7 @@ class Pokedex extends Component {
   }
 
   render() {
-    const {isLoadingPokedex, loadPokedexError, pokedex, searchTerm, sortOption} = this.props
+    const {isLoadingPokedex, loadPokedexError, pokedex, searchTerm, sortOption, isAddingPokemon, addPokemonError} = this.props
 
     let pokemonCards
     if (!isEmpty(pokedex)) {
@@ -44,11 +44,11 @@ class Pokedex extends Component {
     return (
       <>
         {
-          isLoadingPokedex
+          isLoadingPokedex || isAddingPokemon
           ?
           <WholePageSpinner />
           :
-          !isEmpty(loadPokedexError)
+          !isEmpty(loadPokedexError) || !isEmpty(addPokemonError)
           ?
           <WholePageErrorMessage />
           :
@@ -63,7 +63,7 @@ class Pokedex extends Component {
                     color: "white"
                   }}
                 >
-                  Pokemon Searcher
+                  Pokedex
                 </h1>
               </Col>
             </Row>
@@ -97,7 +97,9 @@ const mapStateToProps = state => {
     isLoadingPokedex: state.pokedex.isLoadingPokedex,
     loadPokedexError: state.pokedex.loadPokedexError,
     searchTerm: state.pokedex.searchTerm,
-    sortOption: state.pokedex.sortOption
+    sortOption: state.pokedex.sortOption,
+    isAddingPokemon: state.pokedex.isAddingPokemon,
+    addPokemonError: state.pokedex.addPokemonError
   }
 }
 

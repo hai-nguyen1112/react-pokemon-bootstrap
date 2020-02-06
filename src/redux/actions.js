@@ -117,3 +117,50 @@ const editPokemonFail = error => {
   }
 }
 // end of EDIT POKEMON
+
+// start of ADD POKEMON
+export const addPokemon = newPokemon => {
+  return dispatch => {
+    dispatch(addPokemonStart())
+
+    axios({
+      url: "/pokemon",
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json"
+      },
+      data: {
+        ...newPokemon
+      }
+    })
+    .then(response => dispatch(addPokemonSuccess(response.data)))
+    .catch(error => dispatch(addPokemonFail(error)))
+  }
+}
+
+const addPokemonStart = () => {
+  return {
+    type: actionTypes.ADD_POKEMON_START,
+    isAddingPokemon: true,
+    addPokemonError: null
+  }
+}
+
+const addPokemonSuccess = newPokemon => {
+  return {
+    type: actionTypes.ADD_POKEMON_SUCCESS,
+    isAddingPokemon: false,
+    addPokemonError: null,
+    newPokemon: newPokemon
+  }
+}
+
+const addPokemonFail = error => {
+  return {
+    type: actionTypes.ADD_POKEMON_FAIL,
+    isAddingPokemon: false,
+    addPokemonError: error
+  }
+}
+// end of ADD POKEMON

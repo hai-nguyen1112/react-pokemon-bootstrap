@@ -8,9 +8,12 @@ import Collapse from 'react-bootstrap/Collapse'
 import integerInputValidation from '../helperFunctions/integerInputValidation'
 import {isEmpty} from 'lodash'
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
-import Popover from 'react-bootstrap/Popover'
+import popover from '../helperFunctions/popover'
+import {addPokemon} from '../redux/actions'
+import {connect} from 'react-redux'
+import generateNewPokemon from '../helperFunctions/generateNewPokemon'
 
-const PokemonAdd = () => {
+const PokemonAdd = ({onAddPokemon}) => {
   const [open, setOpen] = useState(false)
   const [pokemonNumber, setPokemonNumber] = useState("")
   const [name, setName] = useState("")
@@ -35,13 +38,11 @@ const PokemonAdd = () => {
     }
   }
 
-  const pokemonNumberInputPopover = (
-    <Popover id="popover-basic">
-      <Popover.Content style={{fontFamily: "'Open Sans Condensed', sans-serif", fontSize: "20px"}}>
-        Enter a number between 1 and 649 to see pokemon's front and back images.
-      </Popover.Content>
-    </Popover>
-  )
+  const handleSubmit = e => {
+    e.preventDefault()
+    onAddPokemon(generateNewPokemon(name, hp, attack, defense, speed, pokemonNumber))
+    clearState()
+  }
 
   return (
     <Card bg="info" text="white" style={{margin: "5px 19px 19px 19px"}}>
@@ -63,7 +64,7 @@ const PokemonAdd = () => {
       </Card.Header>
       <Collapse in={open}>
         <Card.Body style={{marginBottom: "-17px"}}>
-          <Form>
+          <Form onSubmit={handleSubmit}>
             <Row>
               <Col xs={12} sm={12} md={12} lg={4} xl={4}>
                 <Row>
@@ -98,7 +99,7 @@ const PokemonAdd = () => {
                 </Row>
                 <Row style={{marginTop: "25px"}}>
                   <Col xs={12} sm={12} md={12} lg={12} xl={12}>
-                    <OverlayTrigger trigger="hover" placement="bottom" overlay={pokemonNumberInputPopover}>
+                    <OverlayTrigger trigger="hover" placement="bottom" overlay={popover("Enter a number between 1 and 649 to see pokemon's front and back images.")}>
                       <p style={{color: "white", fontFamily: "'Sigmar One', cursive"}}>
                         <Form.Control
                           type="number"
@@ -228,7 +229,7 @@ const PokemonAdd = () => {
               <Col xs={12} sm={12} md={12} lg={4} xl={4} style={{display: "flex", justifyContent: "center", alignItems: "center"}}>
                 <Row>
                   <Col style={{padding: "10px"}}>
-                    <Button type="submit" variant="outline-light" disabled={false}>Submit</Button>
+                    <Button type="submit" variant="outline-light">Submit</Button>
                   </Col>
                 </Row>
               </Col>
@@ -240,4 +241,10 @@ const PokemonAdd = () => {
   )
 }
 
-export default PokemonAdd
+const mapDispatchToProps = dispatch => {
+  return {
+    onAddPokemon: newPokemon => dispatch(addPokemon(newPokemon))
+  }
+}
+
+export default connect(null, mapDispatchToProps)(PokemonAdd)
