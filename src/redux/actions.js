@@ -164,3 +164,43 @@ const addPokemonFail = error => {
   }
 }
 // end of ADD POKEMON
+
+// start of DELETE POKEMON
+export const deletePokemon = id => {
+  return dispatch => {
+    dispatch(deletePokemonStart())
+
+    axios({
+      url: `/pokemon/${id}`,
+      method: "DELETE"
+    })
+    .then(response => dispatch(deletePokemonSuccess(id)))
+    .catch(error => dispatch(deletePokemonFail(error)))
+  }
+}
+
+const deletePokemonStart = () => {
+  return {
+    type: actionTypes.DELETE_POKEMON_START,
+    isDeletingPokemon: true,
+    deletePokemonError: null
+  }
+}
+
+const deletePokemonSuccess = id => {
+  return {
+    type: actionTypes.DELETE_POKEMON_SUCCESS,
+    isDeletingPokemon: false,
+    deletePokemonError: null,
+    id: id
+  }
+}
+
+const deletePokemonFail = error => {
+  return {
+    type: actionTypes.DELETE_POKEMON_FAIL,
+    isDeletingPokemon: false,
+    deletePokemonError: error
+  }
+}
+// end of DELETE POKEMON

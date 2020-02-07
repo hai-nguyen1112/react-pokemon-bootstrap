@@ -19,7 +19,7 @@ class Pokedex extends Component {
   }
 
   render() {
-    const {isLoadingPokedex, loadPokedexError, pokedex, searchTerm, sortOption, isAddingPokemon, addPokemonError} = this.props
+    const {isLoadingPokedex, loadPokedexError, pokedex, searchTerm, sortOption, isAddingPokemon, addPokemonError, isDeletingPokemon, deletePokemonError} = this.props
 
     let pokemonCards
     if (!isEmpty(pokedex)) {
@@ -44,11 +44,11 @@ class Pokedex extends Component {
     return (
       <>
         {
-          isLoadingPokedex || isAddingPokemon
+          isLoadingPokedex || isAddingPokemon || isDeletingPokemon
           ?
           <WholePageSpinner />
           :
-          !isEmpty(loadPokedexError) || !isEmpty(addPokemonError)
+          !isEmpty(loadPokedexError) || !isEmpty(addPokemonError) || !isEmpty(deletePokemonError)
           ?
           <WholePageErrorMessage />
           :
@@ -99,7 +99,9 @@ const mapStateToProps = state => {
     searchTerm: state.pokedex.searchTerm,
     sortOption: state.pokedex.sortOption,
     isAddingPokemon: state.pokedex.isAddingPokemon,
-    addPokemonError: state.pokedex.addPokemonError
+    addPokemonError: state.pokedex.addPokemonError,
+    isDeletingPokemon: state.pokedex.isDeletingPokemon,
+    deletePokemonError: state.pokedex.deletePokemonError
   }
 }
 

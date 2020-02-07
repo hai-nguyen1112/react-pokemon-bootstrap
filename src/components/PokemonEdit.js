@@ -65,10 +65,10 @@ const PokemonEdit = ({pokemon, history, editPokemon, isEditingPokemon, editPokem
                 <Col xs={12} sm={12} md={12} lg={12} xl={12}>
                   <h1 style={{color: "white", fontFamily: "'Sigmar One', cursive"}}>
                     <Form.Group as={Row} controlId="formHorizontalName" style={{marginBottom: "-10px"}}>
-                      <Form.Label column xs={4} sm={4} md={4} lg={4} xl={4}>
+                      <Form.Label column xs={5} sm={5} md={5} lg={5} xl={5}>
                         Name
                       </Form.Label>
-                      <Col xs={8} sm={8} md={8} lg={8} xl={8} style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+                      <Col xs={7} sm={7} md={7} lg={7} xl={7} style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
                         <Form.Control
                           type="text"
                           maxLength="20"
@@ -96,12 +96,12 @@ const PokemonEdit = ({pokemon, history, editPokemon, isEditingPokemon, editPokem
                   </h1>
                 </Col>
                 <Col xs={12} sm={6} md={6} lg={6} xl={6}>
-                  <h1 style={{color: "white", fontFamily: "'Sigmar One', cursive"}}>
+                  <h2 style={{color: "white", fontFamily: "'Sigmar One', cursive"}}>
                     <Form.Group as={Row} controlId="formHorizontalHp" style={{marginBottom: "-10px"}}>
-                      <Form.Label column xs={4} sm={4} md={4} lg={4} xl={4}>
+                      <Form.Label column xs={5} sm={5} md={5} lg={5} xl={5}>
                         HP
                       </Form.Label>
-                      <Col xs={8} sm={8} md={8} lg={8} xl={8} style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+                      <Col xs={7} sm={7} md={7} lg={7} xl={7} style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
                         <Form.Control
                           type="number"
                           min="1"
@@ -135,10 +135,10 @@ const PokemonEdit = ({pokemon, history, editPokemon, isEditingPokemon, editPokem
                         />
                       </Col>
                     </Form.Group>
-                  </h1>
+                  </h2>
                 </Col>
                 <Col xs={12} sm={6} md={6} lg={6} xl={6}>
-                  <h1 style={{color: "white", fontFamily: "'Sigmar One', cursive"}}>
+                  <h2 style={{color: "white", fontFamily: "'Sigmar One', cursive"}}>
                     <Form.Group as={Row} controlId="formHorizontalAtk" style={{marginBottom: "-10px"}}>
                       <Form.Label column xs={5} sm={5} md={5} lg={5} xl={5}>
                         ATK
@@ -177,10 +177,10 @@ const PokemonEdit = ({pokemon, history, editPokemon, isEditingPokemon, editPokem
                         />
                       </Col>
                     </Form.Group>
-                  </h1>
+                  </h2>
                 </Col>
                 <Col xs={12} sm={6} md={6} lg={6} xl={6}>
-                  <h1 style={{color: "white", fontFamily: "'Sigmar One', cursive"}}>
+                  <h2 style={{color: "white", fontFamily: "'Sigmar One', cursive"}}>
                     <Form.Group as={Row} controlId="formHorizontalDef" style={{marginBottom: "-10px"}}>
                       <Form.Label column xs={5} sm={5} md={5} lg={5} xl={5}>
                         DEF
@@ -219,10 +219,10 @@ const PokemonEdit = ({pokemon, history, editPokemon, isEditingPokemon, editPokem
                         />
                       </Col>
                     </Form.Group>
-                  </h1>
+                  </h2>
                 </Col>
                 <Col xs={12} sm={6} md={6} lg={6} xl={6}>
-                  <h1 style={{color: "white", fontFamily: "'Sigmar One', cursive"}}>
+                  <h2 style={{color: "white", fontFamily: "'Sigmar One', cursive"}}>
                     <Form.Group as={Row} controlId="formHorizontalSpd" style={{marginBottom: "-10px"}}>
                       <Form.Label column xs={5} sm={5} md={5} lg={5} xl={5}>
                         SPD
@@ -261,7 +261,7 @@ const PokemonEdit = ({pokemon, history, editPokemon, isEditingPokemon, editPokem
                         />
                       </Col>
                     </Form.Group>
-                  </h1>
+                  </h2>
                 </Col>
               </Row>
               <Row>

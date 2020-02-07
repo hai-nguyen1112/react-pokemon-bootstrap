@@ -6,6 +6,7 @@ import Col from 'react-bootstrap/Col'
 import Image from 'react-bootstrap/Image'
 import Button from 'react-bootstrap/Button'
 import {isEmpty} from 'lodash'
+import PokemonDelete from './PokemonDelete'
 
 const PokemonProfile = ({pokemon, history}) => {
   return (
@@ -67,9 +68,7 @@ const PokemonProfile = ({pokemon, history}) => {
               <Col xs={12} sm={4} md={4} lg={4} xl={4} style={{margin: "20px 0 0 0"}}>
                 <Button variant="outline-warning" onClick={() => {history.push(`/pokedex/${pokemon.id}/edit`)}}>Edit</Button>
               </Col>
-              <Col xs={12} sm={4} md={4} lg={4} xl={4} style={{margin: "20px 0 0 0"}}>
-                <Button variant="outline-danger">Delete</Button>
-              </Col>
+              <PokemonDelete pokemon={pokemon}/>
             </Row>
           </Container>
         </Container>

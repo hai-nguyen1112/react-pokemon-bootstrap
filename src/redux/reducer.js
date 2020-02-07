@@ -11,7 +11,9 @@ const initialState = {
     isEditingPokemon: false,
     editPokemonError: null,
     isAddingPokemon: false,
-    addPokemonError: null
+    addPokemonError: null,
+    isDeletingPokemon: false,
+    deletePokemonError: null
   }
 }
 
@@ -112,6 +114,30 @@ const addPokemonFail = (state, action) => {
   })
 }
 
+const deletePokemonStart = (state, action) => {
+  return updateObject(state, {
+    isDeletingPokemon: action.isDeletingPokemon,
+    deletePokemonError: action.deletePokemonError
+  })
+}
+
+const deletePokemonSuccess = (state, action) => {
+  let newPokedex = state.pokedex.filter(pokemon => pokemon.id !== action.id)
+
+  return updateObject(state, {
+    isDeletingPokemon: action.isDeletingPokemon,
+    deletePokemonError: action.deletePokemonError,
+    pokedex: newPokedex
+  })
+}
+
+const deletePokemonFail = (state, action) => {
+  return updateObject(state, {
+    isDeletingPokemon: action.isDeletingPokemon,
+    deletePokemonError: action.deletePokemonError
+  })
+}
+
 const onResetPokedex = (state, action) => {
   return updateObject(state, {
     pokedex: [],
@@ -122,7 +148,9 @@ const onResetPokedex = (state, action) => {
     isEditingPokemon: false,
     editPokemonError: null,
     isAddingPokemon: false,
-    addPokemonError: null
+    addPokemonError: null,
+    isDeletingPokemon: false,
+    deletePokemonError: null
   })
 }
 
@@ -140,6 +168,9 @@ const pokedexReducer = (state = initialState.pokedex, action) => {
     case actionTypes.ADD_POKEMON_START: return addPokemonStart(state, action)
     case actionTypes.ADD_POKEMON_SUCCESS: return addPokemonSuccess(state, action)
     case actionTypes.ADD_POKEMON_FAIL: return addPokemonFail(state, action)
+    case actionTypes.DELETE_POKEMON_START: return deletePokemonStart(state, action)
+    case actionTypes.DELETE_POKEMON_SUCCESS: return deletePokemonSuccess(state, action)
+    case actionTypes.DELETE_POKEMON_FAIL: return deletePokemonFail(state, action)
     default: return state
   }
 }
