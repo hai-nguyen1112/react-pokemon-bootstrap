@@ -6,6 +6,8 @@ switch (window.location.hostname) {
   case 'localhost':
     instance = axios.create({baseURL: 'http://localhost:3000/'})
     break
+  case 'pokemon-searcher.netlify.com'
+    instance = axios.create({baseURL: 'https://pokemon-searcher.netlify.com/'})
   default:
     instance = axios.create({baseURL: 'http://localhost:3000/'})
 }
